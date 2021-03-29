@@ -2,22 +2,8 @@ for subj in "/Volumes/jilanxin/Miantan/before_nii/bad/sub003_before_nii" "/Volum
 do
  cd $subj
  echo $subj
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/All_V1vsBefore/eye2_reorient+.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz eye2_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/All_V1vsBefore/mouth_reorient+.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/All_V2vsBefore/eye2_reorient+.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz eye2_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/All_V2vsBefore/eye2_reorient+.gfeat/cope1.feat/cluster_mask_zstat2.nii.gz eye2_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/All_V2vsBefore/mouth_reorient++.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/All_V2vsBefore/mouth_reorient+.gfeat/cope1.feat/cluster_mask_zstat2.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
-
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/eye2_reorient+.gfeat/cope1.feat/cluster_mask_zstat2.nii.gz eye2_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/v1_GoodvsBad/eye2_groupmean.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz eye2_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/mouth_reorient+.gfeat/cope1.feat/cluster_mask_zstat2.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/v1_GoodvsBad/mouth_groupmean.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
-
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/eye2_reorient+.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz eye2_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/mouth_reorient+.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/eye2_reorient+.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
- #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/mouth_reorient++.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
+ 
+ fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/mouth_reorient++.gfeat/cope1.feat/cluster_mask_zstat1.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
  #fslstats -K /Volumes/jilanxin/Miantan/higher-level_analyses/NormalvsBefore/mouth_reorient++.gfeat/cope1.feat/cluster_mask_zstat2.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
 
  #fslstats -K /Volumes/jilanxin/Miantan/atlas/postcentral_bin.nii.gz mouth_reorient.feat/reg_standard/stats/cope1.nii.gz -M
