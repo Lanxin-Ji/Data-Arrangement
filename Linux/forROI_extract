@@ -1,3 +1,5 @@
+#!bin/sh
+
 for subj in "/Volumes/jilanxin/Miantan/before_nii/bad/sub003_before_nii" "/Volumes/jilanxin/Miantan/before_nii/bad/sub004_before_nii"
 do
  cd $subj
