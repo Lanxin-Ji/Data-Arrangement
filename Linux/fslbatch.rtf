@@ -1,0 +1,82 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf820
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 export FSLDIR=/opt/fsl/fsl     #  set FSLDIR\
+export PATH=$\{FSLDIR\}/bin:$\{PATH\}     #  set PATH\
+. $\{FSLDIR\}/etc/fslconf/fsl.sh     #  run FSL init script\
+export FREESURFER_HOME=/opt/freesurfer     #  The Freesurfer home directory (version) you want to use\
+export FSFAST_HOME=/opt/freesurfer/fsfast     #  Not sure if these next two are needed but keep them just in case\
+export MNI_DIR=/opt/freesurfer/mni     #  Not sure if these next two are needed but keep them just in case\
+source $FREESURFER_HOME/SetUpFreeSurfer.sh     #  MGH's shell script that sets up Freesurfer to run\
+export SUBJECTS_DIR=\{analysisrootdir\}     #  Point to the subject directory you plan to use - all FS data will go there\
+unset SGE_ROOT     #  remove this so that feat doesn't try to submit to cluster on its own\
+# make the input directories  \
+mkdir -pv \{analysisrootdir\}/analysis     #  create analysis directory (ths subjectID will be analysis)\
+mkdir -pv \{analysisrootdir\}/analysis/unprocessed/3T/1     #  create T1 directory\
+mkdir -pv \{analysisrootdir\}/analysis/unprocessed/3T/2     #  create T1 directory\
+mkdir -pv \{analysisrootdir\}/analysis/unprocessed/3T/3     #  create T1 directory\
+mkdir -pv \{analysisrootdir\}/analysis/unprocessed/3T/4     #  create T1 directory\
+mkdir -pv \{analysisrootdir\}/analysis/unprocessed/3T/5     #  create T1 directory\
+# copy the data to their correct locations  \
+cp -v \{analysisrootdir\}/data/APPAngry/AP/*.nii.gz \{analysisrootdir\}/analysis/APPAngry_AP.nii.gz     #  copy in the AP-EPI image\
+cp -v \{analysisrootdir\}/data/APPAngry/PA/*.nii.gz \{analysisrootdir\}/analysis/APPAngry_PA.nii.gz     #  copy in the PA-EPI image\
+cp -v \{analysisrootdir\}/data/APPAngry/LR/*.nii.gz \{analysisrootdir\}/analysis/APPAngry_LR.nii.gz     #  copy in the LR-EPI image\
+cp -v \{analysisrootdir\}/data/APPAngry/RL/*.nii.gz \{analysisrootdir\}/analysis/APPAngry_RL.nii.gz     #  copy in the RL-EPI image\
+cp -v \{analysisrootdir\}/data/APPAngrysbref/*.nii.gz \{analysisrootdir\}/analysis/APPAngry_SBRef.nii.gz     #  move the EPI image\
+cp -v "$(ls -t \{analysisrootdir\}/data/fmmag/*.nii.gz | head -1)" \{analysisrootdir\}/analysis/FieldMap_Magnitude.nii.gz     #  move the NEWEST fieldmap magnitude image\
+cp -v "$(ls -t \{analysisrootdir\}/data/fmphase/*.nii.gz | head -1)" \{analysisrootdir\}/analysis/FieldMap_Phase.nii.gz     #  move the NEWEST fieldmap phase image\
+cd \{analysisrootdir\}/analysis/     #  go into the directory containing fieldmaps\
+perl /opt/pipeline/fixniftiprecision.pl \{analysisrootdir\}/analysis/FieldMap_Magnitude.nii.gz     #  reduce the voxelsize precision in the z dimension to 3 decimal places\
+perl /opt/pipeline/fixniftiprecision.pl \{analysisrootdir\}/analysis/FieldMap_Phase.nii.gz     #  reduce the voxelsize precision in the z dimension to 3 decimal places\
+bet \{analysisrootdir\}/analysis/FieldMap_Magnitude.nii.gz \{analysisrootdir\}/analysis/FieldMap_Magnitude_brain.nii.gz     #  brain extract the magnitude image\
+#bet \{analysisrootdir\}/analysis/FieldMap_Magnitude.nii.gz \{analysisrootdir\}/analysis/FieldMap_Magnitude_brain.nii.gz  brain extract the magnitude image  \
+#bet \{analysisrootdir\}/analysis/T1w.nii.gz \{analysisrootdir\}/analysis/T1w_brain.nii.gz      brain extract the T1w image  \
+fsl_prepare_fieldmap SIEMENS \{analysisrootdir\}/analysis/FieldMap_Phase.nii.gz \{analysisrootdir\}/analysis/FieldMap_Magnitude_brain.nii.gz \{analysisrootdir\}/analysis/FieldMap.nii.gz 2.46     #  prepare fieldmap for FEAT\
+/opt/freesurfer/bin/./mri_nu_correct.mni --i \{analysisrootdir\}/data/t1w/1/*.nii.gz --o \{analysisrootdir\}/analysis/unprocessed/3T/1/analysis_3T_T1w_MPR1.nii.gz --n 8 --proto-iters 50     #  move T1 image 1 and do NU itensity correction\
+/opt/freesurfer/bin/./mri_nu_correct.mni --i \{analysisrootdir\}/data/t1w/2/*.nii.gz --o \{analysisrootdir\}/analysis/unprocessed/3T/2/analysis_3T_T1w_MPR2.nii.gz --n 8 --proto-iters 50     #  move T1 image 2 and do NU itensity correction\
+/opt/freesurfer/bin/./mri_nu_correct.mni --i \{analysisrootdir\}/data/t1w/3/*.nii.gz --o \{analysisrootdir\}/analysis/unprocessed/3T/3/analysis_3T_T1w_MPR3.nii.gz --n 8 --proto-iters 50     #  move T1 image 3 and do NU itensity correction\
+/opt/freesurfer/bin/./mri_nu_correct.mni --i \{analysisrootdir\}/data/t1w/4/*.nii.gz --o \{analysisrootdir\}/analysis/unprocessed/3T/4/analysis_3T_T1w_MPR4.nii.gz --n 8 --proto-iters 50     #  move T1 image 4 and do NU itensity correction\
+/opt/freesurfer/bin/./mri_nu_correct.mni --i \{analysisrootdir\}/data/t1w/5/*.nii.gz --o \{analysisrootdir\}/analysis/unprocessed/3T/5/analysis_3T_T1w_MPR5.nii.gz --n 8 --proto-iters 50     #  move T1 image 5 and do NU itensity correction\
+cd \{analysisrootdir\}     #  \
+cp -v /home/Lji/onrc/data/APPscript/t1s_followup_jlx.sh .     #  \
+chmod 777 t1s_followup_jlx.sh     #  \
+sh t1s_followup_jlx.sh     #  \
+bet \{analysisrootdir\}/analysis/unprocessed/3T/MPRageMean \{analysisrootdir\}/analysis/unprocessed/3T/MPRageMean_brain     #  brain extract the T1w image\
+cp -v /home/Lji/onrc/data/APPscript/APPangryLevel1.fsf \{analysisrootdir\}/analysis/appangry.fsf     #  copy in .fsf\
+# setup the .fsf  \
+if [ -a \{analysisrootdir\}/analysis/APPAngry_AP.nii.gz ] ; then     # \{NOLOG\} \{NOCHECKIN\} if the A>>P phase encoding EPI exists, set things up for it\
+    mv -v \{analysisrootdir\}/analysis/APPAngry_AP.nii.gz \{analysisrootdir\}/analysis/APPAngry.nii.gz     #  rename the EPI file\
+    sed -i 's|set fmri(unwarp_dir) .*|set fmri(unwarp_dir) y-|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the phase encode to y-\
+fi     # \{NOLOG\} \{NOCHECKIN\}\
+if [ -a \{analysisrootdir\}/analysis/APPAngry_PA.nii.gz ] ; then     # \{NOLOG\} \{NOCHECKIN\} if the P>>A phase encoding EPI exists, set things up for it\
+    mv -v \{analysisrootdir\}/analysis/APPAngry_PA.nii.gz \{analysisrootdir\}/analysis/APPAngry.nii.gz     #  rename the EPI file\
+    sed -i 's|set fmri(unwarp_dir) .*|set fmri(unwarp_dir) y|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the phase encode to y\
+fi     # \{NOLOG\} \{NOCHECKIN\}\
+if [ -a \{analysisrootdir\}/analysis/APPAngry_LR.nii.gz ] ; then     # \{NOLOG\} \{NOCHECKIN\} if the L>>R phase encoding EPI exists, set things up for it\
+    mv -v \{analysisrootdir\}/analysis/APPAngry_LR.nii.gz \{analysisrootdir\}/analysis/APPAngry.nii.gz     #  rename the EPI file\
+    sed -i 's|set fmri(unwarp_dir) .*|set fmri(unwarp_dir) x-|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the phase encode to x-\
+fi     # \{NOLOG\} \{NOCHECKIN\}\
+if [ -a \{analysisrootdir\}/analysis/APPAngry_RL.nii.gz ] ; then     # \{NOLOG\} \{NOCHECKIN\} if the R>>L phase encoding EPI exists, set things up for it\
+    mv -v \{analysisrootdir\}/analysis/APPAngry_RL.nii.gz \{analysisrootdir\}/analysis/APPAngry.nii.gz     #  rename the EPI file\
+    sed -i 's|set fmri(unwarp_dir) .*|set fmri(unwarp_dir) x|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the phase encode to x\
+fi     # \{NOLOG\} \{NOCHECKIN\}\
+NDELETE=0     #  set the number of volumes to delete, which is none for Skyra data\
+T=`fslval \{analysisrootdir\}/analysis/APPAngry.nii.gz dim4`     #  get the number of volumes\
+TR=`fslval \{analysisrootdir\}/analysis/APPAngry.nii.gz pixdim4`     #  get the TR\
+sed -i 's|set fmri(outputdir) .*|set fmri(outputdir) "\{analysisrootdir\}/analysis/APPAngry"|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the output directory\
+sed -i 's|set feat_files.*|set feat_files(1) "\{analysisrootdir\}/analysis/APPAngry"|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the input files\
+sed -i 's|set fmri(tr) .*|set fmri(tr) '"$\{TR\}"'|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the TR\
+sed -i 's|set fmri(npts) .*|set fmri(npts) '"$\{T\}"'|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the number of volumes\
+sed -i 's|set fmri(ndelete) .*|set fmri(ndelete) '"$\{NDELETE\}"'|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the number of volumes to delete\
+sed -i 's|set alt_ex_func(1) .*|set alt_ex_func(1) "\{analysisrootdir\}/analysis/APPAngry_SBRef"|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the input files\
+sed -i 's|set unwarp_files(1) .*|set unwarp_files(1) "\{analysisrootdir\}/analysis/FieldMap"|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the fieldmap files\
+sed -i 's|set unwarp_files_mag(1) .*|set unwarp_files_mag(1) "\{analysisrootdir\}/analysis/FieldMap_Magnitude_brain"|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the fieldmap files\
+sed -i 's|set highres_files(1) .*|set highres_files(1) "\{analysisrootdir\}/analysis/unprocessed/3T/MPRageMean_brain"|' \{analysisrootdir\}/analysis/appangry.fsf     #  set the T1w files\
+feat \{analysisrootdir\}/analysis/appangry.fsf     #  \
+#find \{analysisrootdir\}/data -size +25k -exec truncate -s 0 \{\} \\;;      \{NOCHECKIN\} truncate all files larger than 25kb to 0 size (retains the filenames, but saves space) \{NOLOG\} \
+#find \{analysisrootdir\}/analysis/APPAngry -size +25k -exec truncate -s 0 \{\} \\;;      \{NOCHECKIN\} truncate all files larger than 25kb to 0 size (retains the filenames, but saves space) \{NOLOG\} \
+}

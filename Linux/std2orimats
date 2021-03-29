@@ -1,0 +1,17 @@
+#!bin/sh
+DATADIR=/Volumes/SeagateExpansionDrive/exerciseCBIRdata/task/task_fsl_happy/v1/FunImg
+count=0
+for file in $DATADIR/*
+do 
+  if test -d $file
+  then
+      cd $file/*.feat
+      #pwd
+      convert_xfm -inverse reg/example_func2standard.mat -omat reg/std2example_func.mat
+      flirt -in /Volumes/SeagateExpansionDrive/exerciseCBIRdata/extracttasktimeseries/bDLPFCL.nii -ref reg/example_func.img -applyxfm -init reg/std2example_func.mat -out $file/subject_DLPFCL.nii
+      flirt -in /Volumes/SeagateExpansionDrive/exerciseCBIRdata/extracttasktimeseries/bhippo_parahippo.nii -ref reg/example_func.img -applyxfm -init reg/std2example_func.mat -out $file/subject_bhippo_parahippo.nii
+
+      #flirt -in thresh_zstat2.img -ref reg/example_func.img -applyxfm -init reg/std2example_func.mat -out $file/subject_zstats
+
+  fi
+ done
