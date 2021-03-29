@@ -1,3 +1,5 @@
+#!bin/sh
+
 export FSLDIR=/opt/fsl/fsl     #  set FSLDIR\
 export PATH=$\{FSLDIR\}/bin:$\{PATH\}     #  set PATH\
 . $\{FSLDIR\}/etc/fslconf/fsl.sh     #  run FSL init script\
